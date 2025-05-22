@@ -22,8 +22,11 @@ const cartSlice = createSlice({
     updateQuantity: (state, action) => {
       const { name, quantity } = action.payload;
       const item = state.items.find(item => item.name === name);
-      if (item) {
+      if (item && quantity > 0) {
         item.quantity = quantity;
+      } else if (item && quantity <= 0) {
+        // If quantity is zero or less, remove the item from the cart
+        state.items = state.items.filter(item => item.name !== name);
       }
     },
   },
