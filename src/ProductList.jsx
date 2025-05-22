@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import './ProductList.css';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";  // Added useSelector
 import { addItem } from "../redux/CartSlice";
 import CartItem from './CartItem';
 
 function ProductList({ onHomeClick }) {
     const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.items); // Get cart items from Redux store
+
     const [addedToCart, setAddedToCart] = useState({});
     const [showCart, setShowCart] = useState(false);
-    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [showPlants, setShowPlants] = useState(false);
 
     const plantsArray = [
         {
@@ -218,7 +220,7 @@ function ProductList({ onHomeClick }) {
         }
     ];
     const handleAddToCart = (plant) => {
-        dispatch(addItem(plant));
+        dispatch(addItem(plant));  // Dispatch addItem action
         setAddedToCart((prev) => ({
             ...prev,
             [plant.name]: true,
@@ -285,16 +287,33 @@ function ProductList({ onHomeClick }) {
                 </div>
                 <div style={styleObjUl}>
                     <div><a href="#" onClick={handlePlantsClick} style={styleA}>Plants</a></div>
-                    <div><a href="#" onClick={handleCartClick} style={styleA}>
+                    <div>
+                      <a href="#" onClick={handleCartClick} style={styleA}>
                         <h1 className='cart'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" height="68" width="68">
-                                <rect width="156" height="156" fill="none" />
-                                <circle cx="80" cy="216" r="12" />
-                                <circle cx="184" cy="216" r="12" />
-                                <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                            </svg>
+                          {/* Cart icon */}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" height="68" width="68">
+                            <rect width="156" height="156" fill="none" />
+                            <circle cx="80" cy="216" r="12" />
+                            <circle cx="184" cy="216" r="12" />
+                            <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                          </svg>
+                          {/* Show number of items in cart */}
+                          <span style={{
+                            position: 'absolute',
+                            top: '5px',
+                            right: '5px',
+                            background: 'red',
+                            borderRadius: '50%',
+                            padding: '5px 10px',
+                            color: 'white',
+                            fontSize: '16px',
+                            fontWeight: 'bold'
+                          }}>
+                            {cartItems.length}
+                          </span>
                         </h1>
-                    </a></div>
+                      </a>
+                    </div>
                 </div>
             </div>
 
@@ -324,4 +343,3 @@ function ProductList({ onHomeClick }) {
 }
 
 export default ProductList;
-
